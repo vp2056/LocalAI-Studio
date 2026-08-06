@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="pt-BR" data-tema="escuro">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="LocalAI Studio — plataforma de inteligência artificial local, 100% offline." />
+    <meta name="color-scheme" content="dark light" />
+    <title>LocalAI Studio</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237c6cff'/%3E%3Ctext x='16' y='22' font-family='system-ui' font-size='15' font-weight='700' fill='white' text-anchor='middle'%3EAI%3C/text%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
+
+  <body>
+    <!-- ================================================================ login -->
+    <div class="tela-login" id="tela-login" hidden>
+      <div class="login-cartao">
+        <div class="login-marca">
+          <div class="login-sinal">AI</div>
+          <h1>LocalAI Studio</h1>
+          <p>Inteligência artificial local, 100% offline</p>
+        </div>
+
+        <div class="login-abas">
+          <button class="login-aba ativa" data-aba-login="entrar">Entrar</button>
+          <button class="login-aba" data-aba-login="criar">Criar conta</button>
+        </div>
+
+        <div class="login-erro" id="login-erro"></div>
+
+        <form id="form-login" autocomplete="on">
+          <div class="campo">
+            <label class="campo-rotulo" for="login-usuario">Usuário</label>
+            <input class="entrada" id="login-usuario" name="username" autocomplete="username" required />
+          </div>
+
+          <div class="campo campo-nome oculto">
+            <label class="campo-rotulo" for="login-nome">Nome completo</label>
+            <input class="entrada" id="login-nome" autocomplete="name" />
+          </div>
+
+          <div class="campo">
+            <label class="campo-rotulo" for="login-senha">Senha</label>
+            <input class="entrada" id="login-senha" type="password" name="password" autocomplete="current-password" required />
+            <div class="campo-dica campo-dica-senha oculto">Mínimo de 8 caracteres.</div>
+          </div>
+
+          <button class="btn btn-primario" type="submit" style="width: 100%" id="login-enviar">
+            Entrar
+          </button>
+        </form>
+
+        <p class="pequeno txt-3 centro mt-14">
+          Na primeira execução, as credenciais do administrador aparecem no
+          console do servidor.
+        </p>
+      </div>
+    </div>
+
+    <!-- ================================================================== app -->
+    <div class="app" id="app" hidden>
+      <!-- ------------------------------------------------------- lateral -->
+      <aside class="lateral">
+        <div class="marca">
+          <div class="marca-sinal">AI</div>
+          <div>
+            <div class="marca-nome">LocalAI Studio</div>
+            <div class="marca-versao" id="marca-versao">v1.0.0</div>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <button class="btn btn-primario" style="width: 100%; margin-bottom: 10px" id="btn-nova-conversa">
+            <span data-icone="mais"></span> Nova conversa
+          </button>
+
+          <button class="nav-item ativo" data-pagina="chat">
+            <span data-icone="chat"></span> Chat
+          </button>
+          <button class="nav-item" data-pagina="painel">
+            <span data-icone="painel"></span> Painel
+          </button>
+          <button class="nav-item" data-pagina="modelos">
+            <span data-icone="cubo"></span> Modelos
+            <span class="contador" id="contador-modelos"></span>
+          </button>
+          <button class="nav-item" data-pagina="documentos">
+            <span data-icone="documento"></span> Documentos
+            <span class="contador" id="contador-documentos"></span>
+          </button>
+          <button class="nav-item" data-pagina="agentes">
+            <span data-icone="robo"></span> Agentes
+            <span class="contador" id="contador-agentes"></span>
+          </button>
+          <button class="nav-item" data-pagina="plugins">
+            <span data-icone="plugue"></span> Plugins
+          </button>
+          <button class="nav-item" data-pagina="sistema">
+            <span data-icone="monitor"></span> Monitor
+          </button>
+          <button class="nav-item" data-pagina="logs">
+            <span data-icone="lista"></span> Logs
+          </button>
+          <button class="nav-item" data-pagina="config">
+            <span data-icone="engrenagem"></span> Configurações
+          </button>
+          <button class="nav-item" data-pagina="ajuda">
+            <span data-icone="ajuda"></span> Ajuda
+          </button>
+        </nav>
+
+        <div class="lateral-conversas">
+          <div class="lateral-conversas-topo">
+            <input class="busca-conversas" id="busca-conversas" placeholder="Pesquisar conversas…" />
+          </div>
+          <div class="lista-conversas" id="lista-conversas"></div>
+        </div>
+
+        <div class="lateral-rodape">
+          <div class="avatar" id="usuario-avatar">?</div>
+          <div class="usuario-info">
+            <div class="usuario-nome" id="usuario-nome">—</div>
+            <div class="usuario-papel" id="usuario-papel">—</div>
+          </div>
+          <button class="icone-btn" id="btn-tema" title="Alternar tema"></button>
+          <button class="icone-btn" id="btn-sair" title="Sair"></button>
+        </div>
+      </aside>
+
+      <!-- ------------------------------------------------------ principal -->
+      <main class="principal">
+        <header class="topo">
+          <button class="icone-btn" id="btn-menu" title="Menu"></button>
+          <h1 id="topo-titulo">Chat</h1>
+          <div class="topo-espaco"></div>
+          <div id="topo-acoes" class="flex-centro gap-6"></div>
+        </header>
+
+        <!-- ------------------------------------------------------- chat -->
+        <section class="pagina ativa" id="pagina-chat">
+          <div class="chat-mensagens" id="chat-mensagens">
+            <div class="chat-largura" id="chat-lista"></div>
+          </div>
+
+          <div class="compositor">
+            <div class="chat-largura">
+              <div class="compositor-caixa">
+                <textarea
+                  id="entrada"
+                  rows="1"
+                  placeholder="Escreva sua mensagem…  (Enter envia, Shift+Enter quebra linha)"
+                ></textarea>
+                <button class="btn-enviar" id="btn-enviar" title="Enviar"></button>
+              </div>
+
+              <div class="compositor-barra">
+                <select class="seletor-inline" id="seletor-modelo" title="Modelo"></select>
+                <select class="seletor-inline" id="seletor-agente" title="Agente">
+                  <option value="">Sem agente</option>
+                </select>
+                <button class="alternador" id="alt-rag" title="Consultar a base de documentos">
+                  <span data-icone="documento" data-tamanho="12"></span> RAG
+                </button>
+                <button class="alternador" id="alt-params" title="Parâmetros de geração">
+                  <span data-icone="engrenagem" data-tamanho="12"></span> Parâmetros
+                </button>
+                <span class="espaco"></span>
+                <span id="status-chat"></span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------ painel -->
+        <section class="pagina" id="pagina-painel">
+          <div class="pagina-corpo" id="corpo-painel"></div>
+        </section>
+
+        <section class="pagina" id="pagina-modelos">
+          <div class="pagina-corpo" id="corpo-modelos"></div>
+        </section>
+
+        <section class="pagina" id="pagina-documentos">
+          <div class="pagina-corpo" id="corpo-documentos"></div>
+        </section>
+
+        <section class="pagina" id="pagina-agentes">
+          <div class="pagina-corpo" id="corpo-agentes"></div>
+        </section>
+
+        <section class="pagina" id="pagina-plugins">
+          <div class="pagina-corpo" id="corpo-plugins"></div>
+        </section>
+
+        <section class="pagina" id="pagina-sistema">
+          <div class="pagina-corpo" id="corpo-sistema"></div>
+        </section>
+
+        <section class="pagina" id="pagina-logs">
+          <div class="pagina-corpo" id="corpo-logs"></div>
+        </section>
+
+        <section class="pagina" id="pagina-config">
+          <div class="pagina-corpo" id="corpo-config"></div>
+        </section>
+
+        <section class="pagina" id="pagina-ajuda">
+          <div class="pagina-corpo" id="corpo-ajuda"></div>
+        </section>
+      </main>
+    </div>
+
+    <!-- =============================================================== modais -->
+    <div class="sobreposicao" id="sobreposicao">
+      <div class="modal" id="modal">
+        <div class="modal-topo">
+          <div class="modal-titulo" id="modal-titulo">Título</div>
+          <button class="icone-btn" data-fechar-modal></button>
+        </div>
+        <div class="modal-corpo" id="modal-corpo"></div>
+        <div class="modal-rodape" id="modal-rodape"></div>
+      </div>
+    </div>
+
+    <div class="avisos" id="avisos"></div>
+
+    <!-- Ordem obrigatória: utilitários antes dos módulos que os consomem. -->
+    <script src="/static/js/icones.js"></script>
+    <script src="/static/js/markdown.js"></script>
+    <script src="/static/js/graficos.js"></script>
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/ui.js"></script>
+    <script src="/static/js/chat.js"></script>
+    <script src="/static/js/paginas.js"></script>
+    <script src="/static/js/app.js"></script>
+  </body>
+</html>
