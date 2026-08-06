@@ -1,0 +1,61 @@
+# ---------------------------------------------------------------------------
+# LocalAI Studio - Dependências
+# ---------------------------------------------------------------------------
+# Núcleo obrigatório: necessário para o servidor subir e o sistema funcionar.
+# Os blocos marcados como OPCIONAL habilitam recursos adicionais; o sistema
+# detecta a ausência deles em tempo de execução e degrada com elegância.
+# ---------------------------------------------------------------------------
+
+# --- Núcleo web / API ------------------------------------------------------
+fastapi>=0.110
+uvicorn[standard]>=0.27
+pydantic>=2.6
+pydantic-settings>=2.2
+python-multipart>=0.0.9
+websockets>=12.0
+aiofiles>=23.2
+jinja2>=3.1
+
+# --- Banco de dados --------------------------------------------------------
+SQLAlchemy>=2.0
+
+# --- Segurança -------------------------------------------------------------
+PyJWT>=2.8
+bcrypt>=4.1
+
+# --- Sistema / utilitários -------------------------------------------------
+psutil>=5.9
+watchdog>=4.0
+requests>=2.31
+PyYAML>=6.0
+numpy>=1.26
+
+# --- OPCIONAL: inferência local -------------------------------------------
+llama-cpp-python>=0.2.70          # modelos GGUF (CPU/GPU)
+transformers>=4.40                # modelos safetensors / HuggingFace
+torch>=2.2                        # backend do transformers
+safetensors>=0.4
+onnxruntime>=1.17                 # modelos ONNX
+
+# --- OPCIONAL: RAG / embeddings -------------------------------------------
+sentence-transformers>=2.6        # embeddings de qualidade
+faiss-cpu>=1.8                    # índice vetorial rápido
+chromadb>=0.4                     # alternativa ao FAISS
+
+# --- OPCIONAL: leitura de documentos --------------------------------------
+pypdf>=4.1                        # PDF
+python-docx>=1.1                  # DOCX
+beautifulsoup4>=4.12              # HTML
+
+# --- OPCIONAL: extras ------------------------------------------------------
+pytesseract>=0.3.10               # OCR (requer binário tesseract)
+Pillow>=10.2                      # manipulação de imagens
+faster-whisper>=1.0               # reconhecimento de voz (STT)
+piper-tts>=1.2                    # texto para voz (TTS)
+diffusers>=0.27                   # geração de imagens local
+PySide6>=6.6                      # aplicativo desktop
+
+# --- Testes ----------------------------------------------------------------
+pytest>=8.0
+pytest-asyncio>=0.23
+httpx>=0.27
